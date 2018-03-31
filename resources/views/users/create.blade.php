@@ -2,5 +2,5 @@
 @section('title','注册')
 
 @section('content')
-<h1>注册测试</h1>
+<h1>注册</h1>
 @stop
