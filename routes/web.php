@@ -20,3 +20,5 @@ Route::get('/about','StaticPagesController@about')->name('about');
 
 //用户注册页面
 Route::get('signup','UsersController@create')->name('signup');
+//资源路由 遵循RESTful架构为用户资源生成路由
+Route::resource('users','UsersController');
