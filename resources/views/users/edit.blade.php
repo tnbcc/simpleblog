@@ -13,7 +13,7 @@
  <form method="POST" action="{{ route('users.update', $user->id )}}" enctype="multipart/form-data">
         <div class="gravatar_edit">
           <a href="{{ route('users.show',$user->id) }}">
-            <img src="{{ URL::asset('storage'.$user->img_path) }}" alt=" {{ $user->name }} " class="gravatar"/>
+            <img src="{{ URL::asset($user->img_path) }}" alt=" {{ $user->name }} " class="gravatar"/>
           </a>
 
         </div>

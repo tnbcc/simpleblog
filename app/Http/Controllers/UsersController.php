@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Auth;
+use App\Services\OSS;
 
 class UsersController extends Controller
 {
@@ -97,15 +98,18 @@ class UsersController extends Controller
          $this->authorize('update',$user);
 
            if($request->hasFile('photo') && $request->file('photo')->isValid()){
-                  $photo = $request->file('photo');
-                  $extension = $photo->extension();
-                  $store_result = $photo->store('photo');
+                  $file = $request->file('photo');
+                  $pic = $file->getRealPath();
+                  $extension = $file->extension();
+                  $key = \Auth::id() . '_' . time() . '_' . str_random(10) . '.' .$extension;
+                  $result = OSS::upload($key,$pic);
+                  $path = 'https://ccblogs.oss-cn-beijing.aliyuncs.com/'.$key;
            }
            //exit('未获得上传');
            $ex = ['jpg','jpeg','png','gif'];
          $data = [];
-       if($request->photo && in_array($extension,$ex)){
-                $data['img_path'] = '/'.$store_result;
+       if($request->photo && in_array($extension,$ex) && $result){
+                $data['img_path'] = $path;
        }else{
               $data['img_path'] = $user->img_path;
        }
