@@ -1,5 +1,5 @@
 <li>
-   <img src="{{ URL::asset('storage'.$user->img_path) }}" alt="{{ $user->name }}" class="gravatar"/>
+   <img src="{{ URL::asset($user->img_path) }}" alt="{{ $user->name }}" class="gravatar"/>
    <a href="{{ route('users.show',$user->id) }}" class="username">{{ $user->name }}</a>
 
    @can('destroy',$user)
