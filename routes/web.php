@@ -34,7 +34,7 @@ Route::get('signup/confirm/{token}','UserController@confirmEmail')->name('confir
 
 //Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+
 
 //忘记密码
 
