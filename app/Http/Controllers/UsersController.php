@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Auth;
 use App\Services\OSS;
+use Mail;
 
 class UsersController extends Controller
 {
@@ -16,7 +17,7 @@ class UsersController extends Controller
   public function __construct(){
        //允许游客访问的方法
         $this->middleware('auth',[
-            'except' => ['show','create','store','index']
+            'except' => ['show','create','store','index','confirmEmail']
         ]);
         //登录后的用户无法再次访问注册页面
         $this->middleware('guest',[
@@ -64,10 +65,12 @@ class UsersController extends Controller
              'password'=> bcrypt($request->password),
              'img_path' => '/photo/title.jpg',
         ]);
-        //用户注册成功后自动登录
-        Auth::login($user);
-        session()->flash('success','欢迎，您将开启一段新的旅程~');
-        return redirect()->route('users.show',[$user]);
+        //用户注册成功后提示用户进行账号激活
+        //Auth::login($user);
+        $this->sendEmailConfirmationTo($user);
+        //dd($this->sendEmailConfirmationTo($user));
+        session()->flash('success','验证邮件已发送到您的注册邮箱上，请注意查收。');
+        return redirect('/');
    }
 
    /*
@@ -131,6 +134,39 @@ class UsersController extends Controller
         }
 
      }
+     /*
+      *发送邮件激活
+      */
+      protected function sendEmailConfirmationTo($user)
+        {
+            $view = 'emails.confirm';
+            $data = compact('user');
+            $from = 'hero_sky_c@163.com';
+            $name = 'CcBlog';
+            $to = $user->email;
+            $subject = "感谢注册 CcBlog 应用！请确认你的邮箱。";
+
+            Mail::send($view, $data, function ($message) use ($from, $name, $to, $subject) {
+                $message->from($from, $name)->to($to)->subject($subject);
+            });
+        }
+
+     /*
+      *确认激活
+      */
+
+      public function confirmEmail($token)
+      {
+         $user = User::where('activation_token',$token)->firstOrFail();
+
+         $user->activated = true;
+         $user->activation_token = null;
+         $user->save();
+
+         Auth::login($user);
+         session()->flash('success','恭喜您，激活成功！');
+         return redirect()->route('users.show',[$user]);
+      }
 
      /*
       *DELETE http 删除用户

@@ -19,8 +19,9 @@ class UsersTableSeeder extends Seeder
         $user->name = '孤独风中一匹马。';
         $user->email = 'tniub.cc@gmail.com';
         $user->password = bcrypt('zcaini1314');
-        $user->img_path = '/photo/YwCI2pEoKfa5mOTSv4rzamnGBHvZchwCm4Z7Mfx6.jpeg';
+        $user->img_path = 'storage/photo/YwCI2pEoKfa5mOTSv4rzamnGBHvZchwCm4Z7Mfx6.jpeg';
         $user->is_admin = true;
+        $user->activated = true;
         $user->save();
     }
 }

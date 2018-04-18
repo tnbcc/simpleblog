@@ -29,3 +29,20 @@ Route::get('login','SessionsController@create')->name('login');
 Route::post('login','SessionsController@store')->name('login');
 //销毁会话（退出登录）
 Route::delete('logout','SessionsController@destory')->name('logout');
+
+Route::get('signup/confirm/{token}','UserController@confirmEmail')->name('confirm_email');
+
+//Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+//忘记密码
+
+//显示重置密码的邮箱发送页面
+Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
+//邮箱发送重新设链接
+Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+//密码更新页面
+Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+//执行密码更新操作
+Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');

@@ -29,10 +29,16 @@ class SessionsController extends Controller
       ]);
       //使用Auth中的attempt方法对用户登录信息进行匹配
       if(Auth::attempt($credentials, $request->has('remember'))){
-        //登录成功后的相关操作
-        session()->flash('success','欢迎回来！');
-        //使用Auth::user()方法获取当前用户登录信息,intended方法能将页面重定向到上一次尝试访问的页面上
-        return redirect()->intended(route('users.show', [Auth::user()]));
+        if(Auth::user()->activated){
+          //登录成功后的相关操作
+          session()->flash('success','欢迎回来！');
+          //使用Auth::user()方法获取当前用户登录信息,intended方法能将页面重定向到上一次尝试访问的页面上
+          return redirect()->intended(route('users.show', [Auth::user()]));
+        } else {
+             Auth::logout();
+             session()->flash('warning','你的账号未激活,请检查邮箱中的注册邮件进行激活。');
+             return redirect('/');
+        }
       } else {
         //登录失败后的相关操作
         session()->flash('danger','很抱歉，您的邮箱和密码不匹配！');
