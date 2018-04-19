@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Carbon\Carbon;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,6 +16,9 @@ class AppServiceProvider extends ServiceProvider
     {
         //引导User模型监听器
         \App\Models\User::observe(\App\Observers\UserObserver::class);
+
+        //时间输出转换为中文
+        Carbon::setLocale('zh');
     }
 
     /**
