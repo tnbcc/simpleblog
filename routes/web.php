@@ -48,3 +48,23 @@ Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm
 Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
 
 Route::resource('statuses','StatusesController',['only' => ['store','destroy']]);
+
+//显示关注人
+Route::get('users/{user}/followings','UsersController@followings')->name('users.followings');
+//显示粉丝
+Route::get('users/{user}/followers','UsersController@followers')->name('users.followers');
+
+//实现关注
+Route::post('/users/followers/{user}','FollowersController@store')->name('followers.store');
+//实现取消关注
+Route::delete('/users/followers/{user}','FollowersController@destroy')->name('followers.destroy');
+
+
+//秒杀测试
+
+Route::group(['prefix' => 'orders'],function(){
+
+      Route::get('/spike','OrderController@spike');
+      Route::get('/spike/run','OrderController@run');
+
+});
